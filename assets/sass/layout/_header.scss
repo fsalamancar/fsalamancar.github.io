@@ -246,3 +246,39 @@
 			}
 		}
 	}
+
+
+/* Light Mode */
+body.light-mode #header {
+    background-color: map-get($palette-light, bg-alt);
+    color: map-get($palette-light, fg);
+
+    .logo {
+        strong {
+            background-color: map-get($palette-light, fg-bold);
+            color: map-get($palette-light, bg);
+        }
+
+        &:hover {
+            strong {
+                background-color: map-get($palette-light, highlight);
+            }
+        }
+    }
+
+    nav {
+        a {
+            color: map-get($palette-light, fg);
+
+            &[href="#menu"] {
+                &:before {
+                    background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32" preserveAspectRatio="none"><style>line { stroke-width: 2px; stroke: #{map-get($palette-light, fg-bold)}; }</style><line x1="0" y1="11" x2="24" y2="11" /><line x1="0" y1="21" x2="24" y2="21" /><line x1="0" y1="16" x2="24" y2="16" /></svg>');
+                }
+
+                &:after {
+                    background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32" preserveAspectRatio="none"><style>line { stroke-width: 2px; stroke: #{map-get($palette-light, highlight)}; }</style><line x1="0" y1="11" x2="24" y2="11" /><line x1="0" y1="21" x2="24" y2="21" /><line x1="0" y1="16" x2="24" y2="16" /></svg>');
+                }
+            }
+        }
+    }
+}

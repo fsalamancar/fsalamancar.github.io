@@ -44,4 +44,9 @@
 				}
 			}
 
+		// Light mode
+			&.light-mode {
+				background: map-get($palette-light, bg);
+				color: map-get($palette-light, fg);
+			}
 	}

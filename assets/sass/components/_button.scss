@@ -128,3 +128,51 @@
 			opacity: 0.25;
 		}
 	}
+
+/* Light Mode */
+body.light-mode {
+    input[type="submit"],
+	input[type="reset"],
+	input[type="button"],
+	button,
+	.button {
+        box-shadow: inset 0 0 0 2px map-get($palette-light, fg-bold);
+        color: map-get($palette-light, fg-bold) !important;
+
+        &:hover, &:active {
+            box-shadow: inset 0 0 0 2px map-get($palette-light, highlight);
+            color: map-get($palette-light, highlight) !important;
+        }
+
+        &:active {
+            background-color: transparentize(map-get($palette-light, highlight), 0.9);
+            box-shadow: inset 0 0 0 2px desaturate(darken(map-get($palette-light, highlight), 15), 5);
+			color: desaturate(darken(map-get($palette-light, highlight), 15), 5) !important;
+        }
+
+        &.next {
+            &:before {
+                background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36px" height="24px" viewBox="0 0 36 24" zoomAndPan="disable"><style>line { stroke: #{map-get($palette-light, fg-bold)}; stroke-width: 2px; }</style><line x1="0" y1="12" x2="34" y2="12" /><line x1="25" y1="4" x2="34" y2="12.5" /><line x1="25" y1="20" x2="34" y2="11.5" /></svg>');
+            }
+
+            &:after {
+                background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36px" height="24px" viewBox="0 0 36 24" zoomAndPan="disable"><style>line { stroke: #{map-get($palette-light, highlight)}; stroke-width: 2px; }</style><line x1="0" y1="12" x2="34" y2="12" /><line x1="25" y1="4" x2="34" y2="12.5" /><line x1="25" y1="20" x2="34" y2="11.5" /></svg>');
+            }
+        }
+
+        &.primary {
+            background-color: map-get($palette-light, fg-bold);
+            box-shadow: none;
+            color: map-get($palette-light, bg) !important;
+
+            &:hover, &:active {
+                background-color: map-get($palette-light, highlight);
+                color: map-get($palette-light, bg) !important;
+            }
+
+            &:active {
+                background-color: desaturate(darken(map-get($palette-light, highlight), 15), 5);
+            }
+        }
+    }
+}

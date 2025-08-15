@@ -54,19 +54,19 @@
 			}
 		}
 
-		ul {
-			margin: 0 0 (_size(element-margin) * 0.5) 0;
+			ul {
+				margin: 0 0 (_size(element-margin) * 0.5) 0;
 
-			&.links {
-				list-style: none;
-				padding: 0;
-
-				> li {
+				&.links {
+					list-style: none;
 					padding: 0;
 
-					> a:not(.button) {
-						border: 0;
-						border-top: solid 1px _palette(border);
+					> li {
+						padding: 0;
+
+						> a:not(.button) {
+							border: 0;
+							border-top: solid 1px _palette(border);
 						display: block;
 						font-size: 0.8em;
 						font-weight: _font(weight-bold);
@@ -162,3 +162,29 @@
 			}
 		}
 	}
+
+/* Light Mode */
+body.light-mode {
+    #menu {
+        background: transparentize(map-get($palette-light, bg), 0.1);
+
+        ul.links > li > a:not(.button) {
+            color: map-get($palette-light, fg-bold);
+            border-top-color: map-get($palette-light, border);
+        }
+
+        .close {
+            &:before {
+                background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 20 20" zoomAndPan="disable"><style>line { stroke: #{map-get($palette-light, fg-bold)}; stroke-width: 2; }</style><line x1="0" y1="0" x2="20" y2="20" /><line x1="20" y1="0" x2="0" y2="20" /></svg>');
+            }
+
+            &:after {
+                background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 20 20" zoomAndPan="disable"><style>line { stroke: #{map-get($palette-light, highlight)}; stroke-width: 2; }</style><line x1="0" y1="0" x2="20" y2="20" /><line x1="20" y1="0" x2="0" y2="20" /></svg>');
+            }
+        }
+    }
+
+    &.is-ie #menu {
+        background: transparentize(map-get($palette-light, bg-alt), 0.025);
+    }
+}

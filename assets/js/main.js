@@ -332,4 +332,55 @@
 
 			});
 
+	// Theme Toggle
+	(function() {
+
+		var $body = $('body'),
+			$toggle = $('#theme-toggle');
+
+		if ($toggle.length == 0) {
+			return;
+		}
+
+		// Function to set the theme
+		var setTheme = function(theme) {
+			if (theme === 'light') {
+				$body.addClass('light-mode');
+				$toggle.removeClass('fa-sun').addClass('fa-moon');
+				localStorage.setItem('theme', 'light');
+			} else {
+				$body.removeClass('light-mode');
+				$toggle.removeClass('fa-moon').addClass('fa-sun');
+				localStorage.setItem('theme', 'dark');
+			}
+		};
+
+		// Click event
+		$toggle.on('click', function(event) {
+			event.preventDefault();
+			event.stopPropagation();
+
+			var currentTheme = $body.hasClass('light-mode') ? 'light' : 'dark';
+			if (currentTheme === 'light') {
+				setTheme('dark');
+			} else {
+				setTheme('light');
+			}
+		});
+
+		// Set initial theme
+		var savedTheme = localStorage.getItem('theme');
+		if (savedTheme) {
+			setTheme(savedTheme);
+		} else {
+			// Optional: check for user's OS preference
+			if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+				setTheme('light');
+			} else {
+				setTheme('dark'); // Default
+			}
+		}
+
+	})();
+
 })(jQuery);
