@@ -1,9 +1,5 @@
 <!DOCTYPE HTML>
-<!--
-	Forty by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+
 <html>
 	<head>
 		<title>Fran's Lab - About me</title>
@@ -30,13 +26,13 @@
 				<!-- Menu -->
 				<nav id="menu">
 					<ul class="links">
-						<li><a href="index.html">Home</a></li>
-						<li><a href="about.html">About me</a></li>
-						<li><a href="generic.html">Projects</a></li>
-						<li><a href="elements.html">Skills</a></li>
-						<li><a href="elements.html">Resources</a></li>
-						<li><a href="Colombia.html">Visit Colombia!</a></li>
-						<li><a href="elements.html">Geek Stuff</a></li>
+							<li><a href="index.html">Home</a></li>
+							<li><a href="about.html">About me</a></li>
+							<li><a href="courses.html">Courses</a></li>
+							<li><a href="upcoming.html">Research</a></li>
+							<li><a href="upcoming.html">Resources</a></li>
+							<li><a href="Colombia.html">Visit Colombia!</a></li>
+							<li><a href="https://www.youtube.com/@fjosesala/videos">Geek Stuff</a></li>
 					</ul>
 				</nav>
 
@@ -129,7 +125,7 @@
 					<section id="contact">
 						<div class="inner">
 							<section>
-								<form method="post" action="#">
+								<form method="post" action="https://formspree.io/f/mblkbeny">
 									<div class="fields">
 										<div class="field half">
 											<label for="name">Name</label>
@@ -175,11 +171,9 @@
 					<footer id="footer">
 						<div class="inner">
 							<ul class="icons">
-								<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-								<li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-								<li><a href="#" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
-								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+								<li><a href="https://www.instagram.com/fjosesala/" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+								<li><a href="https://github.com/fsalamancar" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+								<li><a href="https://www.linkedin.com/in/fjosesala" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
 							</ul>
 							<ul class="copyright">
 								<li>&copy; All photos and Design are from Francisco J.Salamanca </li>
@@ -197,6 +191,29 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+
+
+		<script>
+document.querySelector('form[action="https://formspree.io/f/mblkbeny"]').addEventListener('submit', function(e) {
+  e.preventDefault(); // Evita el envío inmediato
+  const form = this;
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: {
+      'Accept': 'application/json'
+    }
+  }).then(response => {
+    if (response.ok) {
+      alert('¡Message Sent! Thank you for reaching out.');
+      form.reset();
+    } else {
+      alert('There was an error. Please try again. \n\n' + "Provide a valid email address.");
+    }
+  });
+});
+</script>
+
 
 	</body>
 </html>
