@@ -1,10 +1,6 @@
 @import 'fontawesome-all.min.css';
 @import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300italic,600,600italic");
-/*
-	Forty by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
-*/
+
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
 pre, a, abbr, acronym, address, big, cite,
@@ -2870,6 +2866,16 @@ body.light-mode #header nav a[href="#menu"]:after {
   position: relative;
   top: -3.25em;
 }
+
+#banner .banner-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5); /* Oscurece el video, no el texto */
+  z-index: 1;
+  pointer-events: none;
+}
+
 #banner:after {
   -moz-transition: opacity 2.5s ease;
   -webkit-transition: opacity 2.5s ease;
@@ -2880,17 +2886,20 @@ body.light-mode #header nav a[href="#menu"]:after {
   -ms-transition-delay: 0.75s;
   transition-delay: 0.75s;
   pointer-events: none;
-  /*background-color: rgb(255, 255, 255);*/
+  background-color: rgb(0, 0, 0);
   content: "";
   display: block;
   height: 100%;
   left: 0;
-  opacity: 0.0;
+  opacity: 0.1;
   position: absolute;
   top: 0;
   width: 100%;
   z-index: 1;
 }
+
+
+
 #banner h1 {
   font-size: 3.25em;
 }
