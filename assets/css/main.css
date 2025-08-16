@@ -2880,6 +2880,7 @@ body.light-mode #header nav a[href="#menu"]:after {
   -ms-transition-delay: 0.75s;
   transition-delay: 0.75s;
   pointer-events: none;
+  /*background-color: rgb(255, 255, 255);*/
   content: "";
   display: block;
   height: 100%;
