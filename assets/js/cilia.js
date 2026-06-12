@@ -33,6 +33,48 @@
 	function rand(a, b) { return a + Math.random() * (b - a); }
 	function pick(arr) { return arr[(Math.random() * arr.length) | 0]; }
 
+	var MTYPES = ['rod', 'rod', 'chain', 'spiral', 'diplo', 'vibrio', 'vibrio', 'antibody', 'dot', 'dot', 'dot'];
+	var MPAL = [COL.purple, COL.pink, COL.amber, COL.green, COL.salmon, COL.purple, COL.salmon];
+
+	// hex → {r,g,b} and a linear blend between two hex colours
+	function hex2rgb(h) { h = h.replace('#', ''); return { r: parseInt(h.substr(0, 2), 16), g: parseInt(h.substr(2, 2), 16), b: parseInt(h.substr(4, 2), 16) }; }
+	function lerpColor(a, b, u) {
+		var A = hex2rgb(a), B = hex2rgb(b);
+		return 'rgb(' + Math.round(A.r + (B.r - A.r) * u) + ',' + Math.round(A.g + (B.g - A.g) * u) + ',' + Math.round(A.b + (B.b - A.b) * u) + ')';
+	}
+
+	// Build one microbe. `fresh` = spawned mid-life (fades in) vs initial fill.
+	// Lifecycle: lumen → stick (on the brush border) → absorb (down through a
+	// cell, morphing to red) → settled (a dot at the base) → fades, respawns.
+	function makeMicrobe(fresh) {
+		var type = pick(MTYPES);
+		return {
+			type: type,
+			bx: rand(0.03, 0.97) * W,
+			by: rand(0.05, 0.34) * H,
+			x: 0, y: 0,
+			color: type === 'antibody' ? COL.pink : (type === 'vibrio' ? COL.salmon : pick(MPAL)),
+			size: rand(0.85, 1.25),
+			ang: rand(0, Math.PI * 2),
+			spin: rand(-0.0015, 0.0015),
+			vx: 0, vy: 0,                                  // velocity from cursor pushes
+			bvx: rand(-0.08, 0.08), bvy: rand(0.04, 0.12), // slow downward lumen current
+			wob: rand(0, Math.PI * 2), wobS: rand(0.4, 0.9), wobA: rand(2, 5),
+			alpha: fresh ? 0 : 1,
+			state: 'lumen', timer: 0, cellX: 0, absSpeed: rand(0.7, 1.3),
+			settleColor: COL.red, settleR: 4
+		};
+	}
+
+	function nearestCellCenter(x) {
+		var best = x, bd = Infinity;
+		for (var i = 0; i < cells.length; i++) {
+			var cx = cells[i].left + cells[i].w / 2, d = Math.abs(cx - x);
+			if (d < bd) { bd = d; best = cx; }
+		}
+		return best;
+	}
+
 	function build() {
 		var rect = canvas.getBoundingClientRect();
 		W = rect.width; H = rect.height;
@@ -74,26 +116,8 @@
 
 		// ---- drifting molecules / microbes in the lumen ----
 		microbes = [];
-		var types = ['rod', 'rod', 'chain', 'spiral', 'diplo', 'vibrio', 'vibrio', 'antibody', 'dot', 'dot', 'dot'];
-		var palette = [COL.purple, COL.pink, COL.amber, COL.green, COL.salmon, COL.purple, COL.salmon];
-		var area = Math.round(W / 70) + 6;
-		for (var m = 0; m < area; m++) {
-			var type = pick(types);
-			microbes.push({
-				type: type,
-				bx: rand(0.03, 0.97) * W,
-				by: rand(0.06, 0.40) * H,
-				x: 0, y: 0,
-				color: type === 'antibody' ? COL.pink : (type === 'vibrio' ? COL.salmon : pick(palette)),
-				size: rand(0.85, 1.25),
-				ang: rand(0, Math.PI * 2),
-				spin: rand(-0.0015, 0.0015),
-				driftA: rand(6, 16),
-				driftP: rand(0, Math.PI * 2),
-				driftS: rand(0.4, 0.9),
-				ox: 0, oy: 0, vx: 0, vy: 0
-			});
-		}
+		var area = Math.round(W / 60) + 8;
+		for (var m = 0; m < area; m++) microbes.push(makeMicrobe(false));
 
 		// ---- scattered molecules below the cells ----
 		lowerDots = [];
@@ -207,26 +231,63 @@
 			circle(o.x, o.y + Math.sin(t * 1.5 + o.bob) * 1.5, o.r, o.color);
 		}
 
-		// ---- drifting microbes in the lumen ----
+		// ---- microbes: lumen → stick on brush → absorb through cell → settle ----
+		var bot = H * 0.93, brushTopY = epiTop - 24;
 		for (var m = 0; m < microbes.length; m++) {
 			var p = microbes[m];
-			// gentle drift around base position
-			var dx2 = Math.cos(t * p.driftS + p.driftP) * p.driftA;
-			var dy2 = Math.sin(t * p.driftS * 0.8 + p.driftP) * p.driftA * 0.6;
-			// cursor repulsion (spring)
-			var tx = 0, ty = 0;
-			if (mouse.active) {
-				var mx = p.bx + dx2 - mouse.x, my = p.by + dy2 - mouse.y;
-				var md = Math.sqrt(mx * mx + my * my), MR = 150;
-				if (md < MR && md > 0.01) { var ff = (1 - md / MR); tx = (mx / md) * ff * 70; ty = (my / md) * ff * 70; }
-			}
-			p.vx += (tx - p.ox) * 0.08; p.vx *= 0.86; p.ox += p.vx;
-			p.vy += (ty - p.oy) * 0.08; p.vy *= 0.86; p.oy += p.vy;
 
-			p.x = p.bx + dx2 + p.ox;
-			p.y = p.by + dy2 + p.oy;
-			p.ang += p.spin;
-			drawMicrobe(p);
+			if (p.state === 'lumen') {
+				// cursor pushes molecules and they stay where shoved (settle, no snap-back)
+				if (mouse.active) {
+					var mx = p.bx - mouse.x, my = p.by - mouse.y;
+					var md = Math.sqrt(mx * mx + my * my), MR = 150;
+					if (md < MR && md > 0.01) { var ff = 1 - md / MR; ff *= ff; p.vx += (mx / md) * ff * 3.4; p.vy += (my / md) * ff * 3.4; }
+				}
+				p.vx *= 0.9; p.vy *= 0.9;
+				p.bx += p.vx + p.bvx;
+				p.by += p.vy + p.bvy;          // slow downward current toward the epithelium
+				if (p.alpha < 1) p.alpha = Math.min(1, p.alpha + 0.02);
+
+				p.x = p.bx + Math.cos(t * p.wobS + p.wob) * p.wobA;
+				p.y = p.by + Math.sin(t * p.wobS * 0.9 + p.wob) * p.wobA;
+				p.ang += p.spin;
+
+				if (p.by >= brushTopY) {        // reached the brush border → cling
+					p.state = 'stick'; p.by = brushTopY; p.vx = p.vy = 0;
+					p.timer = t + rand(0.4, 1.0); p.cellX = nearestCellCenter(p.bx);
+				} else if (p.bx < -30 || p.bx > W + 30 || p.by < -40) {
+					microbes[m] = makeMicrobe(true); continue;   // drifted away → refill from top
+				}
+				ctx.globalAlpha = p.alpha; drawMicrobe(p); ctx.globalAlpha = 1;
+
+			} else if (p.state === 'stick') {   // pinned to the cilia, jittering
+				p.x = p.bx + Math.sin(t * 6 + p.wob) * 1.5;
+				p.y = brushTopY + Math.sin(t * 4 + p.wob) * 1.2;
+				p.ang += p.spin;
+				if (t >= p.timer) p.state = 'absorb';
+				ctx.globalAlpha = p.alpha; drawMicrobe(p); ctx.globalAlpha = 1;
+
+			} else if (p.state === 'absorb') {  // slide into the cell column, descend, morph to red
+				p.bx += (p.cellX - p.bx) * 0.06;
+				p.by += p.absSpeed;
+				var prog = Math.max(0, Math.min(1, (p.by - epiTop) / (bot - epiTop)));
+				p.x = p.bx; p.y = p.by;
+				ctx.globalAlpha = p.alpha;
+				circle(p.x, p.y, (5 * p.size) * (1 - 0.35 * prog), lerpColor(p.color, COL.nucleus, Math.min(1, prog + 0.15)));
+				ctx.globalAlpha = 1;
+				if (p.by >= bot - 4) {
+					p.state = 'settled';
+					p.by = rand(0.955, 0.99) * H; p.bx = p.cellX + rand(-8, 8);
+					p.timer = t + rand(3, 6);
+					p.settleColor = pick([COL.red, COL.salmon, COL.red]);
+					p.settleR = rand(3.5, 6);
+				}
+
+			} else {                            // settled dot at the base, then fades and respawns up top
+				p.x = p.bx; p.y = p.by + Math.sin(t * 1.5 + p.wob) * 1.5;
+				if (t >= p.timer) { p.alpha -= 0.02; if (p.alpha <= 0) { microbes[m] = makeMicrobe(true); continue; } }
+				ctx.globalAlpha = p.alpha; circle(p.x, p.y, p.settleR, p.settleColor); ctx.globalAlpha = 1;
+			}
 		}
 
 		requestAnimationFrame(draw);
