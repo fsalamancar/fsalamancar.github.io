@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /elements.html
+
+Sitemap: https://fsalamancar.github.io/sitemap.xml

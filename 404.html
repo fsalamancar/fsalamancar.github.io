@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>404 — Fran Salamanca</title>
+	<link rel="icon" type="image/png" href="images/icon.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="description" content="Page not found." />
+	<meta name="robots" content="noindex" />
+	<meta name="theme-color" content="#f4efe6" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link rel="stylesheet" href="assets/css/precision.css" />
+</head>
+<body>
+
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header class="nav solid">
+	<a href="index.html" class="brand"><b>Fran’s</b> <i>Lab</i></a>
+	<nav class="links">
+		<a href="index.html">Home</a>
+		<a href="about.html">About</a>
+		<a href="courses.html">Courses</a>
+		<a href="https://fluorescent-need-f5d.notion.site/Courses-1dcde205f93380c4b2d7d87d26024b37?source=copy_link">Research</a>
+		<a href="Colombia.html">Colombia</a>
+		<a href="about.html#contact" class="cta">Get in touch</a>
+	</nav>
+	<button class="nav-toggle" aria-label="Menu">☰</button>
+</header>
+
+<div id="mobile-menu">
+	<button class="close" aria-label="Close">×</button>
+	<a href="index.html">Home</a>
+	<a href="about.html">About</a>
+	<a href="courses.html">Courses</a>
+	<a href="https://fluorescent-need-f5d.notion.site/Courses-1dcde205f93380c4b2d7d87d26024b37?source=copy_link">Research</a>
+	<a href="Colombia.html">Colombia</a>
+	<a href="about.html#contact">Get in touch</a>
+</div>
+
+<div id="content"></div>
+<section class="page-banner" style="background:var(--bg);min-height:60vh;">
+	<div class="wrap">
+		<p class="eyebrow reveal">Error 404</p>
+		<h1 class="display reveal d1" style="margin-top:1.4rem;">Sequence <span class="italic">not found.</span></h1>
+		<p class="lede reveal d2" style="margin-top:1.6rem;">This region of the genome hasn't been annotated yet. The page you're looking for moved, mutated, or never existed.</p>
+		<a href="index.html" class="btn reveal d3" style="margin-top:2.2rem;">← Back to the lab</a>
+	</div>
+</section>
+
+<footer class="site">
+	<div class="wrap">
+		<div class="bottom" style="border-top:none;padding-top:0;">
+			<span>© <span id="yr"></span> Francisco J. Salamanca · National University of Colombia</span>
+			<span class="foot-status"><span class="status-dot" aria-hidden="true"></span>Open to collaborate · Bogotá <span data-bogota-time>--:--</span></span>
+		</div>
+	</div>
+</footer>
+
+<script src="assets/js/precision.js"></script>
+<script>document.getElementById('yr').textContent = new Date().getFullYear();</script>
+</body>
+</html>
