@@ -235,8 +235,27 @@
 		</div>
 	</div>
 	<div id="cilia-panel" style="margin-top:3rem;">
-		<span class="cilia-hint">Move your mouse to stir the molecules</span>
 		<canvas id="cilia-canvas"></canvas>
+
+		<!-- game HUD -->
+		<div id="gut-hud" aria-hidden="true">
+			<div class="g-stat">Score <b id="g-score">0</b></div>
+			<div class="g-stat g-best">Best <b id="g-best">0</b></div>
+			<div id="g-combo" class="g-combo">×1</div>
+			<div class="g-health"><i id="g-health-fill"></i></div>
+		</div>
+
+		<!-- start / game-over overlay -->
+		<div id="gut-overlay" class="show">
+			<div class="g-card">
+				<span class="g-eyebrow">· Gut Guardian</span>
+				<h3 id="g-title">Defend the barrier</h3>
+				<p id="g-desc">Sweep your cursor to create flow. Flush the <b class="g-bad">pathogens</b> back out the top — and guide the <b class="g-good">nutrients</b> down into the cells to score. Don't let invaders reach the wall.</p>
+				<p id="g-final" class="g-final"></p>
+				<button id="g-start">Start</button>
+				<span class="g-legend"><i class="dot bad"></i> pathogen &nbsp;&nbsp; <i class="dot good"></i> nutrient</span>
+			</div>
+		</div>
 	</div>
 </section>
 

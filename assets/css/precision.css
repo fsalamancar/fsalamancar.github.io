@@ -279,8 +279,32 @@ footer.site .bottom { display:flex; justify-content:space-between; align-items:c
 
 /* cilia interactive panel */
 #cilia-panel { position:relative; }
-#cilia-canvas { display:block; width:100%; height: clamp(380px, 56vh, 540px); cursor: crosshair; }
+#cilia-canvas { display:block; width:100%; height: clamp(380px, 56vh, 540px); cursor: crosshair; touch-action: none; }
 .cilia-hint { position:absolute; top:1.6rem; left:50%; transform:translateX(-50%); font-size:.72rem; letter-spacing:.26em; text-transform:uppercase; color:var(--ink-faint); pointer-events:none; transition: opacity .6s; }
+
+/* ---- Gut Guardian game HUD ---- */
+#gut-hud { position:absolute; top:1.4rem; left:0; right:0; padding:0 clamp(1.2rem,4vw,3rem); display:flex; align-items:center; gap:1.4rem; pointer-events:none; font-family:var(--sans); }
+#gut-hud .g-stat { font-size:.72rem; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-faint); }
+#gut-hud .g-stat b { font-family:var(--serif); font-style:italic; font-size:1.15rem; letter-spacing:0; color:var(--accent-deep); margin-left:.3em; }
+#gut-hud .g-combo { margin-left:auto; font-family:var(--serif); font-style:italic; font-size:1.5rem; color:var(--accent-deep); opacity:0; transition:opacity .25s; }
+#gut-hud .g-health { position:absolute; left:clamp(1.2rem,4vw,3rem); right:clamp(1.2rem,4vw,3rem); top:2.6rem; height:4px; background:rgba(0,0,0,.08); border-radius:3px; overflow:hidden; }
+#gut-hud .g-health i { display:block; height:100%; width:100%; background:linear-gradient(90deg,#cf5b50,#e0a14e,#6fa86a); transition:width .2s linear; }
+
+#gut-overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(244,239,230,.55); backdrop-filter:blur(2px); opacity:0; visibility:hidden; transition:opacity .4s; padding:1.5rem; }
+#gut-overlay.show { opacity:1; visibility:visible; }
+#gut-overlay .g-card { max-width:430px; text-align:center; background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:2.4rem 2.2rem; box-shadow:0 30px 70px -30px rgba(120,100,90,.4); }
+#gut-overlay .g-eyebrow { font-family:var(--sans); font-size:.7rem; letter-spacing:.26em; text-transform:uppercase; color:var(--ink-faint); }
+#gut-overlay h3 { font-family:var(--serif); font-size:1.9rem; margin:.6rem 0 .8rem; letter-spacing:-.02em; }
+#gut-overlay p { font-size:.95rem; line-height:1.55; color:var(--ink-soft); font-weight:300; margin:0 0 1.2rem; }
+#gut-overlay .g-bad { color:#6b5fb0; font-weight:500; } #gut-overlay .g-good { color:var(--green,#5e9359); font-weight:500; }
+#gut-overlay .g-final { font-family:var(--serif); font-size:1.05rem; color:var(--ink); }
+#gut-overlay .g-final b { color:var(--accent-deep); font-style:italic; }
+#gut-overlay button { font-family:var(--sans); font-size:.82rem; letter-spacing:.05em; border:1px solid var(--ink); background:var(--ink); color:var(--bg); border-radius:100px; padding:.7rem 2rem; cursor:pointer; transition:background .25s,color .25s; }
+#gut-overlay button:hover { background:transparent; color:var(--ink); }
+#gut-overlay .g-legend { display:block; margin-top:1.2rem; font-size:.72rem; letter-spacing:.06em; color:var(--ink-faint); }
+#gut-overlay .g-legend .dot { display:inline-block; width:10px; height:10px; border-radius:50%; vertical-align:middle; margin-right:.2em; }
+#gut-overlay .g-legend .dot.bad { background:#8478C9; box-shadow:0 0 0 1.5px #3c3766 inset; }
+#gut-overlay .g-legend .dot.good { background:#6fa86a; box-shadow:0 0 0 4px rgba(111,168,106,.25); }
 
 /* syllabus / programa */
 .syllabus { display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem; margin-top:2.5rem; }
